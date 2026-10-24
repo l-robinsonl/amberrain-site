@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AmberRain — A tailored scorecard for every role</title>
+    <meta
+      name="description"
+      content="AmberRain turns each job description into a tailored scorecard, then scores every CV against it the same way, so you can see exactly why each candidate scored what they did."
+    />
+    <meta name="theme-color" content="#2925fe" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AmberRain — A tailored scorecard for every role" />
+    <meta
+      property="og:description"
+      content="Every role is different. AmberRain builds a weighted scorecard for each job and scores every CV against it, with every score explained."
+    />
+    <meta property="og:image" content="og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Apply the saved theme, or the system preference, before the first paint.
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        try {
+          var theme = localStorage.getItem("amberrain-site-theme");
+          if (theme === "light" || theme === "dark") root.dataset.theme = theme;
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <svg class="sprite" aria-hidden="true">
+      <symbol id="i-rain" viewBox="0 0 24 24"><path d="M12 2C9 7 4 11 4 15a8 8 0 0 0 16 0c0-4-5-8-8-13Z" /><path d="M8 15a4 4 0 0 0 4 4" /></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></symbol>
+      <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5ZM20 2v4M18 4h4" /></symbol>
+      <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" /><path d="M14 2v6h6M8 13h8M8 17h5" /></symbol>
+      <symbol id="i-rubric" viewBox="0 0 24 24"><path d="M9 5h12M9 12h12M9 19h12M3 5l1 1 2-2M3 12l1 1 2-2M3 19l1 1 2-2" /></symbol>
+      <symbol id="i-people" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M22 21v-2a4 4 0 0 0-3-3.87" /><circle cx="9" cy="7" r="4" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6Z" /><path d="m8 12 3 3 5-6" /></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5" /></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="m16 3 5 5-12 12-6 1 1-6ZM14 5l5 5" /></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 13a9 9 0 0 1-10-10 9 9 0 1 0 10 10Z" /></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 11v6M12 7v.5" /></symbol>
+      <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M5 7h14M5 7l-3 7a3 3 0 0 0 6 0Zm14 0-3 7a3 3 0 0 0 6 0Z" /></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+    </svg>
+
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#top" aria-label="AmberRain home">
+          <span class="brand-mark"><svg class="icon"><use href="#i-rain" /></svg></span>
+          AmberRain<span class="brand-dot">.</span>
+        </a>
+        <nav class="site-nav" aria-label="Sections">
+          <a href="#why">Why custom</a>
+          <a href="#examples">Examples</a>
+          <a href="#how">How it works</a>
+          <a href="#fairness">Fairness</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <div class="header-actions">
+          <button class="icon-button theme-toggle" type="button" aria-label="Switch to dark mode">
+            <svg class="icon icon-moon"><use href="#i-moon" /></svg>
+            <svg class="icon icon-sun"><use href="#i-sun" /></svg>
+          </button>
+          <a class="text-link sign-in" href="https://amberrain.leerobinson1984.workers.dev/login">Sign in</a>
+          <a class="button primary small" href="mailto:lee@amberrain.co.uk?subject=AmberRain%20access%20request">Request access</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-glow" aria-hidden="true"></div>
+        <div class="container hero-inner">
+          <div class="hero-copy">
+            <span class="eyebrow-pill reveal">
+              <svg class="icon"><use href="#i-sparkle" /></svg>
+              A tailored scorecard for every role
+            </span>
+            <h1 id="hero-title" class="reveal">
+              Every role is different. <span class="accent">Your scoring should be too.</span>
+            </h1>
+            <p class="lead reveal">
+              Add a job description and AmberRain builds a scorecard just for that role: the skills and experience
+              that matter most, weighted by importance, with a clear guide to what good looks like. Every CV is scored
+              the same way, and you can see exactly why each candidate got their score.
+            </p>
+            <div class="hero-actions reveal">
+              <a class="button primary" href="mailto:lee@amberrain.co.uk?subject=AmberRain%20access%20request">
+                Request access <svg class="icon"><use href="#i-arrow" /></svg>
+              </a>
+              <a class="button secondary" href="#examples">See example scorecards</a>
+            </div>
+            <ul class="hero-points reveal" aria-label="At a glance">
+              <li><svg class="icon"><use href="#i-check" /></svg>Written for each job</li>
+              <li><svg class="icon"><use href="#i-check" /></svg>Weighted by importance</li>
+              <li><svg class="icon"><use href="#i-check" /></svg>Every score explained</li>
+              <li><svg class="icon"><use href="#i-check" /></svg>No automatic rejections</li>
+            </ul>
+          </div>
+
+          <div class="hero-visual reveal" aria-label="A job description becoming a scorecard">
+            <figure class="jd-card">
+              <figcaption class="card-label"><svg class="icon"><use href="#i-file" /></svg>Job description · Care assistant</figcaption>
+              <p><mark>No previous care experience is needed</mark>: full training, including the Care Certificate, is provided.</p>
+              <p>Genuine <mark>compassion and patience</mark>, with examples of caring for or supporting others.</p>
+              <p>Reliability and the ability to <mark>follow procedures carefully</mark>.</p>
+              <p>Clear communication and good teamwork.</p>
+              <p>Willingness to <mark>work shifts</mark>, including some weekends.</p>
+            </figure>
+            <div class="hero-arrow" aria-hidden="true">
+              <span><svg class="icon"><use href="#i-sparkle" /></svg></span>
+            </div>
+            <figure class="rubric-card">
+              <figcaption class="rubric-card-head">
+                <span class="card-label"><svg class="icon"><use href="#i-rubric" /></svg>Scorecard · Care assistant</span>
+                <span class="pill">100 points</span>
+              </figcaption>
+              <ol class="weights" style="--scale: 50">
+                <li style="--w: 28"><span class="weights-name">Compassionate support for others</span><span class="weights-value">28</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 24"><span class="weights-name">Reliability and following procedures</span><span class="weights-value">24</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 22"><span class="weights-name">Clear communication and shift teamwork</span><span class="weights-value">22</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 18"><span class="weights-name">Shift and weekend availability</span><span class="weights-value">18</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 8"><span class="weights-name">Readiness for care support training</span><span class="weights-value">8</span><span class="weights-bar" aria-hidden="true"></span></li>
+              </ol>
+              <p class="rubric-card-note">
+                <svg class="icon"><use href="#i-info" /></svg>
+                The job says no experience is needed, so prior care experience counts for just 8 of the 100 points.
+              </p>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="why" aria-labelledby="why-title">
+        <div class="container split">
+          <div class="split-copy">
+            <p class="eyebrow reveal">The problem with generic scorecards</p>
+            <h2 id="why-title" class="reveal">One checklist can't fit every job.</h2>
+            <p class="lead reveal">
+              Many teams score every role on the same handful of criteria: communication, experience, education,
+              teamwork and culture fit. It feels consistent, but it measures a care assistant and an AI engineer with
+              the same ruler.
+            </p>
+            <ul class="problem-list">
+              <li class="reveal">
+                <strong>What the job needs gets diluted.</strong>
+                The skills that decide success in this role share the points with criteria that barely apply.
+              </li>
+              <li class="reveal">
+                <strong>Experience crowds out potential.</strong>
+                Years in post and qualifications count even when the job says no experience is needed.
+              </li>
+              <li class="reveal">
+                <strong>Buzzwords score well.</strong>
+                “Excellent communicator” and “team player” earn points without a shred of evidence.
+              </li>
+              <li class="reveal">
+                <strong>Nobody can say why.</strong>
+                When a candidate gets a 7 rather than a 5, there's nothing written down to explain it.
+              </li>
+            </ul>
+          </div>
+          <div class="compare reveal">
+            <figure class="panel generic-card">
+              <figcaption class="panel-head">
+                <span>Generic scorecard</span>
+                <span class="pill muted-pill">Same for every role</span>
+              </figcaption>
+              <ol class="weights neutral" style="--scale: 50">
+                <li style="--w: 20"><span class="weights-name">Communication</span><span class="weights-value">20</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 20"><span class="weights-name">Experience</span><span class="weights-value">20</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 20"><span class="weights-name">Education</span><span class="weights-value">20</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 20"><span class="weights-name">Teamwork</span><span class="weights-value">20</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 20"><span class="weights-name">Culture fit</span><span class="weights-value">20</span><span class="weights-bar" aria-hidden="true"></span></li>
+              </ol>
+            </figure>
+            <figure class="panel custom-card">
+              <figcaption class="panel-head">
+                <span>AmberRain · Rental car cleaner</span>
+                <span class="pill">Written for this job</span>
+              </figcaption>
+              <ol class="weights" style="--scale: 50">
+                <li style="--w: 48"><span class="weights-name">Teamwork and customer service</span><span class="weights-value">48</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 28"><span class="weights-name">Safe independent working</span><span class="weights-value">28</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 16"><span class="weights-name">Valid driving licence</span><span class="weights-value">16</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 4"><span class="weights-name">Relevant practical experience</span><span class="weights-value">4</span><span class="weights-bar" aria-hidden="true"></span></li>
+                <li style="--w: 4"><span class="weights-name">Cleaning and vehicle readiness</span><span class="weights-value">4</span><span class="weights-bar" aria-hidden="true"></span></li>
+              </ol>
+            </figure>
+            <p class="compare-caption">Points out of 100. Same scale on both cards.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-tinted" id="examples" aria-labelledby="examples-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">Example scorecards</p>
+            <h2 id="examples-title" class="reveal">Four jobs. Four completely different scorecards.</h2>
+            <p class="lead reveal">
+              Each scorecard was built from its own job description. Pick a role to see what AmberRain looks for, how
+              much each skill counts and how every CV is scored.
+            </p>
+          </div>
+
+          <div class="explorer reveal">
+            <div class="role-tabs" role="tablist" aria-label="Example roles">
+              <button role="tab" type="button" id="tab-ai-engineer" data-role="ai-engineer" aria-selected="true" aria-controls="role-panel">AI engineer</button>
+              <button role="tab" type="button" id="tab-care-assistant" data-role="care-assistant" aria-selected="false" aria-controls="role-panel" tabindex="-1">Care assistant</button>
+              <button role="tab" type="button" id="tab-account-executive" data-role="account-executive" aria-selected="false" aria-controls="role-panel" tabindex="-1">Account executive</button>
+              <button role="tab" type="button" id="tab-rental-car-cleaner" data-role="rental-car-cleaner" aria-selected="false" aria-controls="role-panel" tabindex="-1">Rental car cleaner</button>
+            </div>
+            <div class="role-panel panel" id="role-panel" role="tabpanel" aria-labelledby="tab-ai-engineer" tabindex="0">
+              <div class="role-main">
+                <div class="role-head">
+                  <div>
+                    <h3 class="role-title"></h3>
+                    <p class="role-context"></p>
+                  </div>
+                  <span class="pill">100 points</span>
+                </div>
+                <p class="role-summary"></p>
+                <p class="chart-note">Points out of 100 · select a criterion to see how it's scored</p>
+                <ol class="criteria" aria-label="Criteria and points"></ol>
+                <p class="role-seniority" hidden>
+                  <svg class="icon"><use href="#i-scale" /></svg>
+                  <span></span>
+                </p>
+                <noscript><p class="role-summary">Turn on JavaScript to explore the example scorecards.</p></noscript>
+              </div>
+              <aside class="role-detail" aria-live="polite">
+                <p class="detail-label">What AmberRain looks for</p>
+                <h4 class="detail-title"></h4>
+                <p class="detail-question"></p>
+                <p class="detail-label">Scoring guide, 0 to 4</p>
+                <ol class="levels" start="0"></ol>
+              </aside>
+            </div>
+          </div>
+
+          <ul class="facts">
+            <li class="reveal"><strong>4–8</strong><span>focused criteria per role, each measuring one thing</span></li>
+            <li class="reveal"><strong>5</strong><span>clear scoring levels per criterion, from no evidence to strong evidence</span></li>
+            <li class="reveal"><strong>100</strong><span>points, weighted towards what the role requires</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="how" aria-labelledby="how-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">How it works</p>
+            <h2 id="how-title" class="reveal">From job description to ranked shortlist in three steps.</h2>
+          </div>
+          <ol class="steps">
+            <li class="step panel reveal">
+              <span class="step-number">01</span>
+              <span class="step-icon"><svg class="icon"><use href="#i-upload" /></svg></span>
+              <h3>Add the job description</h3>
+              <p>
+                Upload the job description or paste it in. AmberRain reads the responsibilities, the requirements and
+                what really matters for the role.
+              </p>
+            </li>
+            <li class="step panel reveal">
+              <span class="step-number">02</span>
+              <span class="step-icon"><svg class="icon"><use href="#i-edit" /></svg></span>
+              <h3>Review your scorecard</h3>
+              <p>
+                In under a minute you get 4–8 focused criteria, each with a weighting and a clear scoring guide. Edit
+                anything, or tell AmberRain what to change and it rewrites the scorecard.
+              </p>
+            </li>
+            <li class="step panel reveal">
+              <span class="step-number">03</span>
+              <span class="step-icon"><svg class="icon"><use href="#i-people" /></svg></span>
+              <h3>Score every CV the same way</h3>
+              <p>
+                Each CV is assessed criterion by criterion against the same scorecard. You get a ranked list, the
+                reasoning behind every score and a CSV export.
+              </p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section section-tinted" id="benefits" aria-labelledby="benefits-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">Why it works</p>
+            <h2 id="benefits-title" class="reveal">Better shortlists for every role.</h2>
+          </div>
+          <ul class="benefits">
+            <li class="benefit reveal">
+              <span class="benefit-icon"><svg class="icon"><use href="#i-file" /></svg></span>
+              <h3>Relevant by design</h3>
+              <p>The criteria come from the job description, so you measure what this role needs, not what the last one did.</p>
+            </li>
+            <li class="benefit reveal">
+              <span class="benefit-icon"><svg class="icon"><use href="#i-scale" /></svg></span>
+              <h3>Weighted to what matters</h3>
+              <p>Essential skills carry the most points; desirable and trainable ones carry fewer. Weightings always add up to 100.</p>
+            </li>
+            <li class="benefit reveal">
+              <span class="benefit-icon"><svg class="icon"><use href="#i-rubric" /></svg></span>
+              <h3>Consistent across candidates</h3>
+              <p>Everyone applying for a role is scored on the same criteria, against the same scoring guide.</p>
+            </li>
+            <li class="benefit reveal">
+              <span class="benefit-icon"><svg class="icon"><use href="#i-people" /></svg></span>
+              <h3>Fair to different paths</h3>
+              <p>Evidence from volunteering, school and informal work counts. When a role needs no experience, experience can't dominate the score.</p>
+            </li>
+            <li class="benefit reveal">
+              <span class="benefit-icon"><svg class="icon"><use href="#i-search" /></svg></span>
+              <h3>See exactly why</h3>
+              <p>Every score is broken down criterion by criterion, showing the level each one reached and how the points add up.</p>
+            </li>
+            <li class="benefit reveal">
+              <span class="benefit-icon"><svg class="icon"><use href="#i-shield" /></svg></span>
+              <h3>Your team makes the call</h3>
+              <p>AmberRain drafts and scores. Your team reviews, edits and decides. Nobody is rejected automatically.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="scores" aria-labelledby="scores-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">Every score, unpacked</p>
+            <h2 id="scores-title" class="reveal">No black boxes. See how every score adds up.</h2>
+            <p class="lead reveal">
+              Each criterion is scored from 0 to 4 against its scoring guide, then weighted by importance. The points
+              add up to a total out of 100, shown as a score out of 10.
+            </p>
+          </div>
+          <div class="score-layout">
+            <figure class="panel score-card reveal">
+              <figcaption class="score-head">
+                <div>
+                  <span class="card-label"><svg class="icon"><use href="#i-people" /></svg>Example candidate · Rental car cleaner</span>
+                  <p class="score-sub">73.2 of 100 points · seniority fits the role</p>
+                </div>
+                <p class="score-total"><span class="score-value">7.3</span><span class="score-of">/ 10</span></p>
+              </figcaption>
+              <ol class="breakdown" style="--scale: 50">
+                <li style="--w: 48; --e: 40.8">
+                  <div class="breakdown-text">
+                    <span class="breakdown-name">Teamwork and customer service</span>
+                    <span class="breakdown-points"><strong>40.8</strong> / 48</span>
+                  </div>
+                  <span class="meter" aria-hidden="true"><span></span></span>
+                  <span class="breakdown-level">Coordinated service · 3.4 of 4</span>
+                </li>
+                <li style="--w: 28; --e: 21">
+                  <div class="breakdown-text">
+                    <span class="breakdown-name">Safe independent working</span>
+                    <span class="breakdown-points"><strong>21.0</strong> / 28</span>
+                  </div>
+                  <span class="meter" aria-hidden="true"><span></span></span>
+                  <span class="breakdown-level">Independent and safe · 3.0 of 4</span>
+                </li>
+                <li style="--w: 16; --e: 8.4">
+                  <div class="breakdown-text">
+                    <span class="breakdown-name">Valid driving licence</span>
+                    <span class="breakdown-points"><strong>8.4</strong> / 16</span>
+                  </div>
+                  <span class="meter" aria-hidden="true"><span></span></span>
+                  <span class="breakdown-level">Needs verification · 2.1 of 4</span>
+                </li>
+                <li style="--w: 4; --e: 2">
+                  <div class="breakdown-text">
+                    <span class="breakdown-name">Relevant practical experience</span>
+                    <span class="breakdown-points"><strong>2.0</strong> / 4</span>
+                  </div>
+                  <span class="meter" aria-hidden="true"><span></span></span>
+                  <span class="breakdown-level">General cleaning · 2.0 of 4</span>
+                </li>
+                <li style="--w: 4; --e: 1">
+                  <div class="breakdown-text">
+                    <span class="breakdown-name">Cleaning and vehicle readiness</span>
+                    <span class="breakdown-points"><strong>1.0</strong> / 4</span>
+                  </div>
+                  <span class="meter" aria-hidden="true"><span></span></span>
+                  <span class="breakdown-level">Basic preparation · 1.0 of 4</span>
+                </li>
+              </ol>
+              <p class="score-foot">Track length shows the points available; the filled part shows the points earned.</p>
+            </figure>
+
+            <figure class="panel evidence-card reveal">
+              <figcaption>
+                <span class="card-label"><svg class="icon"><use href="#i-info" /></svg>When evidence is missing</span>
+                <h3>Not mentioned isn't the same as a no.</h3>
+                <p>
+                  This CV mentions delivery driving but never says the candidate holds a licence. Instead of scoring
+                  zero, AmberRain marks it as “needs verification”, worth 8.4 of 16 points, so you know what to check
+                  at interview.
+                </p>
+              </figcaption>
+              <p class="chart-note">Valid driving licence · how likely each level is</p>
+              <ol class="probabilities" start="0">
+                <li style="--p: 2"><span class="prob-value">2%</span><span class="prob-bar" aria-hidden="true"></span><span class="prob-label">Explicitly not held</span></li>
+                <li style="--p: 4"><span class="prob-value">4%</span><span class="prob-bar" aria-hidden="true"></span><span class="prob-label">Not currently valid</span></li>
+                <li class="is-top" style="--p: 78"><span class="prob-value">78%</span><span class="prob-bar" aria-hidden="true"></span><span class="prob-label">Needs verification</span></li>
+                <li style="--p: 12"><span class="prob-value">12%</span><span class="prob-bar" aria-hidden="true"></span><span class="prob-label">Licence stated</span></li>
+                <li style="--p: 4"><span class="prob-value">4%</span><span class="prob-bar" aria-hidden="true"></span><span class="prob-label">Valid licence stated</span></li>
+              </ol>
+              <p class="confidence">Score 2.1 of 4 · 82% confidence</p>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-tinted" id="fairness" aria-labelledby="fairness-title">
+        <div class="container split split-top">
+          <div class="split-copy">
+            <p class="eyebrow reveal">Built for better judgement</p>
+            <h2 id="fairness-title" class="reveal">Fairness is designed in, not bolted on.</h2>
+            <p class="lead reveal">
+              Every AmberRain scorecard is built to the same principles, so each candidate is judged on what they can
+              show for the job and nothing else.
+            </p>
+          </div>
+          <ul class="principles">
+            <li class="reveal">
+              <svg class="icon"><use href="#i-check" /></svg>
+              <div><strong>Job-relevant evidence only.</strong> Scorecards are built never to score names, addresses, age, gender, disability, ethnicity, family status or school prestige.</div>
+            </li>
+            <li class="reveal">
+              <svg class="icon"><use href="#i-check" /></svg>
+              <div><strong>Seniority judged against the role.</strong> It's based on recent relevant responsibilities, never age, time since graduation or career length.</div>
+            </li>
+            <li class="reveal">
+              <svg class="icon"><use href="#i-check" /></svg>
+              <div><strong>Not mentioned isn't a no.</strong> A CV that doesn't mention a licence isn't treated as proof the candidate doesn't have one.</div>
+            </li>
+            <li class="reveal">
+              <svg class="icon"><use href="#i-check" /></svg>
+              <div><strong>Evidence over buzzwords.</strong> Concrete examples from any setting count. Unsupported claims like “team player” don't.</div>
+            </li>
+            <li class="reveal">
+              <svg class="icon"><use href="#i-check" /></svg>
+              <div><strong>Same terms for everyone.</strong> Changing a scorecard clears its scores, so no two candidates are compared on different criteria.</div>
+            </li>
+            <li class="reveal">
+              <svg class="icon"><use href="#i-check" /></svg>
+              <div><strong>People decide.</strong> Scores support your review. AmberRain never rejects a candidate automatically.</div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="faq" aria-labelledby="faq-title">
+        <div class="container faq-layout">
+          <div class="section-head left">
+            <p class="eyebrow reveal">FAQ</p>
+            <h2 id="faq-title" class="reveal">Questions, answered.</h2>
+          </div>
+          <div class="faq-list">
+            <details class="reveal">
+              <summary>Is the scorecard really different for every job?</summary>
+              <p>Yes. Each job description gets its own scorecard, built for that role: 4–8 criteria, each with a weighting and a scoring guide. When two roles share a criterion, it's worded and weighted for each job. In the app, you'll see the scorecard called a scoring rubric.</p>
+            </details>
+            <details class="reveal">
+              <summary>Can I change the scorecard?</summary>
+              <p>Yes. Edit the criteria, scoring guide and weightings directly, or describe what you'd like changed and AmberRain rewrites the scorecard. Changing a scorecard clears existing scores, so every candidate is measured the same way.</p>
+            </details>
+            <details class="reveal">
+              <summary>How is a score calculated?</summary>
+              <p>Each criterion is scored from 0 to 4 against its scoring guide and earns its score&nbsp;÷&nbsp;4&nbsp;×&nbsp;its weighting, so a 3 out of 4 on a 20-point criterion earns 15 points. The points add up to a total out of 100, shown as a score out of 10. If the job states a level, such as entry level, candidates whose recent roles are well above it get a clearly shown adjustment. It's never based on age or years of experience.</p>
+            </details>
+            <details class="reveal">
+              <summary>Does AmberRain reject candidates?</summary>
+              <p>No. AmberRain ranks and explains; your team decides. Scores are there to support a fair, consistent review, not to replace it.</p>
+            </details>
+            <details class="reveal">
+              <summary>What happens when a CV doesn't mention something?</summary>
+              <p>Requirements have a “needs verification” level. A CV that doesn't mention a licence, for example, is marked as needing verification rather than scored as if the candidate doesn't hold one.</p>
+            </details>
+            <details class="reveal">
+              <summary>What does the AI do?</summary>
+              <p>One AI model drafts each scorecard from the job description. A second model, built for structured decisions, then scores every CV against it, giving each criterion a score, a confidence level and the likelihood of each scoring level.</p>
+            </details>
+            <details class="reveal">
+              <summary>How do I get access?</summary>
+              <p>AmberRain is invitation-only. <a href="mailto:lee@amberrain.co.uk?subject=AmberRain%20access%20request">Request access</a> and we'll set up a workspace for your team.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta" aria-labelledby="cta-title">
+        <div class="container">
+          <div class="cta-card reveal">
+            <h2 id="cta-title">See the potential. Find the fit.</h2>
+            <p>
+              Give every role the scorecard it deserves. AmberRain is invitation-only: tell us about your hiring and
+              we'll set up a workspace for your team.
+            </p>
+            <div class="hero-actions">
+              <a class="button light" href="mailto:lee@amberrain.co.uk?subject=AmberRain%20access%20request">
+                Request access <svg class="icon"><use href="#i-arrow" /></svg>
+              </a>
+              <a class="button ghost" href="https://amberrain.leerobinson1984.workers.dev/login">Sign in</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <a class="brand" href="#top" aria-label="AmberRain home">
+            <span class="brand-mark"><svg class="icon"><use href="#i-rain" /></svg></span>
+            AmberRain<span class="brand-dot">.</span>
+          </a>
+          <p class="footer-tagline">A little clarity goes a long way.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="#examples">Examples</a>
+          <a href="#how">How it works</a>
+          <a href="#faq">FAQ</a>
+          <a href="https://amberrain.leerobinson1984.workers.dev/login">Sign in</a>
+          <a href="mailto:lee@amberrain.co.uk">Contact</a>
+        </nav>
+        <p class="footer-copy">© <span data-year>2026</span> AmberRain</p>
+      </div>
+    </footer>
+
+    <script src="roles.js" defer></script>
+    <script src="script.js" defer></script>
+  </body>
+</html>

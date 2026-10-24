@@ -1,0 +1,9 @@
+{
+  // Static marketing site, deployed separately from the app's Worker.
+  // Deploy with: npx wrangler deploy
+  "name": "amberrain-site",
+  "compatibility_date": "2026-10-19",
+  "assets": {
+    "directory": ".",
+  },
+}
